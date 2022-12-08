@@ -6,7 +6,12 @@ from fastapi.responses import RedirectResponse
 
 # Create app instance 
 app = FastAPI(
-    title="SongAPI"
+    title="SongAPI",
+    description="Using this API, you can download almost 1,350 songs.Also, it can be used for your PET projects.",
+    license_info={
+        'name':'Contribute to SongAPI',
+        'url':'https://github.com/hasindusithmin/songapi'
+    }
 )
 
 # ROOT 
@@ -26,6 +31,26 @@ async def find_all(sort:Keys=Keys.SONG,reverse:bool=False):
         resource =  json.load(fp)
         return sorted(resource,key=lambda k:k[sort.value],reverse=reverse)
 
+# route: /singers 
+@app.get('/find-singers')
+async def find_singers():
+    with open('resource.json','r') as fp:
+        resource =  json.load(fp)
+        return sorted(set([r['singer'] for r in resource]))
+
+# route: /find-songsby-singer 
+@app.get('/find-songsby-singer/{singer}')
+async def find_songsby_singer(singer:str):
+    with open('resource.json','r') as fp:
+        resource =  json.load(fp)
+        return list(
+            filter(
+                lambda obj:obj['singer'].lower() == singer.lower(),
+                resource
+            )
+        )
+            
+        
 
 # define alphabet List 
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
