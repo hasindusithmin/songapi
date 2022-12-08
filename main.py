@@ -76,3 +76,18 @@ async def search_song(quotes:str):
         if len(result) == 0:
             raise HTTPException(status_code=404)
         return result
+
+# route /search-song
+@app.get('/search-singer/{quotes}')
+async def search_singer(quotes:str):
+    with open('resource.json','r') as fp:
+        resource =  json.load(fp)
+        result =  list(
+            filter(
+                lambda obj:re.search(f'^{quotes.capitalize()}',obj['singer']),
+                resource
+            )
+        )
+        if len(result) == 0:
+            raise HTTPException(status_code=404)
+        return result
