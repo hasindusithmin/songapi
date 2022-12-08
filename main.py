@@ -1,3 +1,4 @@
+import re
 import json
 from enum import Enum
 from fastapi import FastAPI,HTTPException
@@ -60,3 +61,18 @@ async def find_singers_by_letter(char:str):
                 resource
             )
         )
+        
+# route /search-song
+@app.get('/search-song/{quotes}')
+async def search_song(quotes:str):
+    with open('resource.json','r') as fp:
+        resource =  json.load(fp)
+        result =  list(
+            filter(
+                lambda obj:re.search(f'^{quotes.capitalize()}',obj['song']),
+                resource
+            )
+        )
+        if len(result) == 0:
+            raise HTTPException(status_code=404)
+        return result
