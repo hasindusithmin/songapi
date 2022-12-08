@@ -69,7 +69,7 @@ async def search_song(quotes:str):
         resource =  json.load(fp)
         result =  list(
             filter(
-                lambda obj:re.search(f'.{quotes.capitalize()}',obj['song']),
+                lambda obj:re.search(f'.{quotes.lower()}',obj['song'].lower()),
                 resource
             )
         )
@@ -84,7 +84,7 @@ async def search_singer(quotes:str):
         resource =  json.load(fp)
         result =  list(
             filter(
-                lambda obj:re.search(f'.{quotes.capitalize()}',obj['singer']),
+                lambda obj:re.search(f'.{quotes.lower()}',obj['singer'].lower()),
                 resource
             )
         )
