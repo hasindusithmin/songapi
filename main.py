@@ -1,6 +1,6 @@
 import json
 from enum import Enum
-from fastapi import FastAPI
+from fastapi import FastAPI,HTTPException
 from fastapi.responses import RedirectResponse
 
 # Create app instance 
@@ -25,3 +25,22 @@ async def find_all(sort:Keys=Keys.SONG,reverse:bool=False):
         resource =  json.load(fp)
         return sorted(resource,key=lambda k:k[sort.value],reverse=reverse)
 
+
+# define alphabet List 
+alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+# route: /findsongby-letter 
+@app.get('/findsongby-letter/{char}')
+async def find_song_by_letter(char:str):
+    # check if the string contains only letters (a-zA-Z).
+    if char not in alphabet:
+        raise HTTPException(status_code=400,detail='string should contain only alphabets')
+    # if the string contains only letters (a-zA-Z).
+    with open('resource.json','r') as fp:
+        resource =  json.load(fp)
+        return list(
+            filter(
+                lambda obj:obj['song'].startswith(char.upper()),
+                resource
+            )
+        )
