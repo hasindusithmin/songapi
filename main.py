@@ -4,15 +4,30 @@ from enum import Enum
 from fastapi import FastAPI,HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+
+description = '''
+![music](https://songapi.deta.dev/static/music.gif)
+
+Using this **API**, you can download almost **1,350 songs**.
+
+Also, it can be used for your **PET projects**.(You can create a mobile/web application to download songs.)
+'''
 
 # Create app instance 
 app = FastAPI(
     title="SongAPI",
-    description="Using this API, you can download almost 1,350 songs.Also, it can be used for your PET projects.",
+    description=description,
     license_info={
         'name':'Contribute to SongAPI',
         'url':'https://github.com/hasindusithmin/songapi'
-    }
+    },
+    contact={
+        "name": "Hasindu Sithmin",
+        "url": "https://hasindusithmin.github.io/",
+        "email": "hasindusithmin64@gmail.com",
+    },
 )
 
 app.add_middleware(
@@ -22,6 +37,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 # ROOT 
 @app.get('/')
