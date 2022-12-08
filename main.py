@@ -3,6 +3,7 @@ import json
 from enum import Enum
 from fastapi import FastAPI,HTTPException
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 # Create app instance 
 app = FastAPI(
@@ -12,6 +13,14 @@ app = FastAPI(
         'name':'Contribute to SongAPI',
         'url':'https://github.com/hasindusithmin/songapi'
     }
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # ROOT 
